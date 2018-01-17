@@ -75,10 +75,10 @@ namespace Game1
                                                  + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             player.Initialize(playerAnimation, playerPosition);
             // Load the parallaxing background
-            bgLayer1.Initialize(Content, "Graphics/bgLayer1", GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, -1);
-            bgLayer2.Initialize(Content, "Graphics/bgLayer2", GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, -2);
+            //bgLayer1.Initialize(Content, "Graphics/bgLayer1", GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, -1);
+            //bgLayer2.Initialize(Content, "Graphics/bgLayer2", GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, -2);
 
-            mainBackground = Content.Load<Texture2D>("Graphics/mainbackground");
+            //mainBackground = Content.Load<Texture2D>("Graphics/mainbackground");
 
         }
 
@@ -88,7 +88,7 @@ namespace Game1
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+
         }
 
         /// <summary>
@@ -113,8 +113,8 @@ namespace Game1
             // Update the player
             UpdatePlayer(gameTime);
             // Update the parallaxing background
-            bgLayer1.Update(gameTime);
-            bgLayer2.Update(gameTime);
+            //bgLayer1.Update(gameTime);
+            //bgLayer2.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -186,10 +186,10 @@ namespace Game1
             spriteBatch.Begin();
 
             // Draw the Main Background Texture
-            spriteBatch.Draw(mainBackground, rectBackground, Color.White);
+            //spriteBatch.Draw(mainBackground, rectBackground, Color.White);
             // Draw the moving background
-            bgLayer1.Draw(spriteBatch);
-            bgLayer2.Draw(spriteBatch);
+            //bgLayer1.Draw(spriteBatch);
+            //bgLayer2.Draw(spriteBatch);
 
             player.Draw(spriteBatch);
 
