@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Shooter;
+using System;
+using System.Collections.Generic;
 
 namespace Game1
 {
@@ -26,10 +28,19 @@ namespace Game1
         private float playerMoveSpeed;
 
         // Image used to display the static background
-        private Texture2D mainBackground;
-        private Rectangle rectBackground;
-        private float scale = 1f;
-        private ParallaxingBackground bgLayer1, bgLayer2;
+        //private Texture2D mainBackground;
+        //private Rectangle rectBackground;
+        //private float scale = 1f;
+        //private ParallaxingBackground bgLayer1, bgLayer2;
+
+        //Enemies
+        private Texture2D enemyTexture;
+        private List<Enemy> enemies;
+        // The rate at which the enemies appear
+        private TimeSpan enemySpawnTime;
+        private TimeSpan previousSpawnTime;
+        // A random number generator
+        private Random random;
         
         public Game1()
         {
@@ -46,10 +57,22 @@ namespace Game1
         /// </summary>
         protected override void Initialize()
         {
+            // Initialize player
             player = new Player();
+
             // Background
-            bgLayer1 = new ParallaxingBackground();
-            bgLayer2 = new ParallaxingBackground();
+            //bgLayer1 = new ParallaxingBackground();
+            //bgLayer2 = new ParallaxingBackground();
+
+            // Initialize the enemies list
+            enemies = new List<Enemy>();
+            // Set the time keepers to zero
+            previousSpawnTime = TimeSpan.Zero;
+            // Used to determine how fast enemy respawns
+            enemySpawnTime = TimeSpan.FromSeconds(1.0f);
+            // Initialize our random number generator
+            random = new Random();
+
 
             playerMoveSpeed = 8.0f;
             TouchPanel.EnabledGestures = GestureType.FreeDrag;
@@ -79,6 +102,8 @@ namespace Game1
             //bgLayer2.Initialize(Content, "Graphics/bgLayer2", GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, -2);
 
             //mainBackground = Content.Load<Texture2D>("Graphics/mainbackground");
+
+            enemyTexture = Content.Load<Texture2D>("Shadow");
 
         }
 
@@ -173,6 +198,11 @@ namespace Game1
                 posDelta *= playerMoveSpeed;
                 player.Position += posDelta;
             }
+        }
+
+        private void AddEnemy()
+        {
+            // Create the anamation object
         }
 
         /// <summary>
