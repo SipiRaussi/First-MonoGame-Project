@@ -142,6 +142,8 @@ namespace Game1
             //bgLayer2.Update(gameTime);
             // Update the enemies
             UpdateEnemy(gameTime);
+            // Update the collision
+            UpdateCollision();
 
             base.Update(gameTime);
         }
@@ -225,7 +227,36 @@ namespace Game1
 
         private void UpdateCollision()
         {
+            // Use the Rectangle's built-in intersect function to determine if two objects are overlapping
+            Rectangle rectangle1;
+            Rectangle rectangle2;
 
+            // Only create the rectangle once for player
+            rectangle1 = new Rectangle((int)player.Position.X,
+                                       (int)player.Position.Y,
+                                       player.Width,
+                                       player.Height);
+            // Do the collision between the player and the enemies
+            for (int enemy = 0; enemy < enemies.Count; enemy++)
+            {
+                rectangle2 = new Rectangle((int)enemies[enemy].Position.X,
+                                           (int)enemies[enemy].Position.Y,
+                                           enemies[enemy].Width,
+                                           enemies[enemy].Height);
+                // Determine if the two objects collided with each other
+                if (rectangle1.Intersects(rectangle2))
+                {
+                    // Substract the healt from the player based on the enemy damage
+                    player.Health -= enemies[enemy].Damage;
+                    // Since the enemy collided with the player destroy it
+                    enemies[enemy].Health = 0;
+                    // If the player health is less than zero we died
+                    if(player.Health <= 0)
+                    {
+                        player.Active = false;
+                    }
+                }
+            }
         }
 
         private void AddEnemy()
