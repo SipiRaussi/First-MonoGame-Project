@@ -103,7 +103,7 @@ namespace Game1
 
             //mainBackground = Content.Load<Texture2D>("Graphics/mainbackground");
 
-            enemyTexture = Content.Load<Texture2D>("Shadow");
+            enemyTexture = Content.Load<Texture2D>("Graphics/Shadow");
 
         }
 
@@ -140,6 +140,8 @@ namespace Game1
             // Update the parallaxing background
             //bgLayer1.Update(gameTime);
             //bgLayer2.Update(gameTime);
+            // Update the enemies
+            UpdateEnemy(gameTime);
 
             base.Update(gameTime);
         }
@@ -200,9 +202,47 @@ namespace Game1
             }
         }
 
+        private void UpdateEnemy(GameTime gameTime)
+        {
+            // Spawn a new enemy evry 1.5 seconds
+            if(gameTime.TotalGameTime - previousSpawnTime > enemySpawnTime)
+            {
+                previousSpawnTime = gameTime.TotalGameTime;
+                // Add enemy
+                AddEnemy();
+            }
+
+            // Update the enemies
+            for(int enemy = enemies.Count - 1; enemy >= 0; enemy--)
+            {
+                enemies[enemy].Update(gameTime);
+                if(enemies[enemy].Active == false)
+                {
+                    enemies.RemoveAt(enemy);
+                }
+            }
+        }
+
+        private void UpdateCollision()
+        {
+
+        }
+
         private void AddEnemy()
         {
-            // Create the anamation object
+            // Create the animation object
+            Animation enemyAnimation = new Animation();
+            // Initialize the animation with the correct animation information
+            enemyAnimation.Initialize(enemyTexture, Vector2.Zero, 64, 64, 7, 75, Color.White, 1f, true);
+            // Randomly generate the position of the enemy
+            Vector2 position = new Vector2(GraphicsDevice.Viewport.Width + enemyTexture.Width / 2,
+                                           random.Next(100, GraphicsDevice.Viewport.Height - 100));
+            // Create enemy
+            Enemy enemy = new Enemy();
+            // Initialize enemy
+            enemy.Initialize(enemyAnimation, position);
+            // Add the enemy to the active enemy list
+            enemies.Add(enemy);
         }
 
         /// <summary>
@@ -220,6 +260,11 @@ namespace Game1
             // Draw the moving background
             //bgLayer1.Draw(spriteBatch);
             //bgLayer2.Draw(spriteBatch);
+            // Draw the enemies
+            for (int enemy = 0; enemy < enemies.Count; enemy++ )
+            {
+                enemies[enemy].Draw(spriteBatch);
+            }
 
             player.Draw(spriteBatch);
 
