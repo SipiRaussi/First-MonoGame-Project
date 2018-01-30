@@ -126,7 +126,7 @@ namespace Game1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // Save the previous state of the keyboard and game pad so we can detrmine single key/button presses
+            // Save the previous state of the keyboard and game pad so we can determine single key/button presses
             previousGamePadState = currentGamePadState;
             previousKeyboardState = currentKeyboardState;
             previosMouseState = currentMouseState;
@@ -215,12 +215,12 @@ namespace Game1
             }
 
             // Update the enemies
-            for(int enemy = enemies.Count - 1; enemy >= 0; enemy--)
+            for(int enemyIndex = enemies.Count - 1; enemyIndex >= 0; enemyIndex--)
             {
-                enemies[enemy].Update(gameTime);
-                if(enemies[enemy].Active == false)
+                enemies[enemyIndex].Update(gameTime);
+                if(enemies[enemyIndex].Active == false)
                 {
-                    enemies.RemoveAt(enemy);
+                    enemies.RemoveAt(enemyIndex);
                 }
             }
         }
@@ -237,19 +237,19 @@ namespace Game1
                                        player.Width,
                                        player.Height);
             // Do the collision between the player and the enemies
-            for (int enemy = 0; enemy < enemies.Count; enemy++)
+            for (int enemyIndex = 0; enemyIndex < enemies.Count; enemyIndex++)
             {
-                rectangle2 = new Rectangle((int)enemies[enemy].Position.X,
-                                           (int)enemies[enemy].Position.Y,
-                                           enemies[enemy].Width,
-                                           enemies[enemy].Height);
+                rectangle2 = new Rectangle((int)enemies[enemyIndex].Position.X,
+                                           (int)enemies[enemyIndex].Position.Y,
+                                           enemies[enemyIndex].Width,
+                                           enemies[enemyIndex].Height);
                 // Determine if the two objects collided with each other
                 if (rectangle1.Intersects(rectangle2))
                 {
                     // Substract the healt from the player based on the enemy damage
-                    player.Health -= enemies[enemy].Damage;
+                    player.Health -= enemies[enemyIndex].Damage;
                     // Since the enemy collided with the player destroy it
-                    enemies[enemy].Health = 0;
+                    enemies[enemyIndex].Health = 0;
                     // If the player health is less than zero we died
                     if(player.Health <= 0)
                     {
