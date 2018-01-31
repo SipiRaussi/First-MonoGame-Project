@@ -1,7 +1,7 @@
 # Peliohjemointi 1, perusteet. 
 
-Moottori: MonoGame
+Moottori: **MonoGame**
 
-Tekijät: Sipi Raussi & Mikko Peltola
+Tekijät: **Sipi Raussi & Mikko Peltola**
 
-30.1.2018
+*30.1.2018*
