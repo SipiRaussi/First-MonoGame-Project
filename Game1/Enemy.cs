@@ -63,7 +63,7 @@ namespace TopDownShooter
         public void Draw(SpriteBatch spriteBatch)
         {
             // Draw the animation
-            EnemyAnimation.Draw(spriteBatch);
+            EnemyAnimation.Draw(spriteBatch, 0f);
         }
     }
 }

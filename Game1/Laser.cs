@@ -40,7 +40,7 @@ namespace TopDownShooter
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            LaserAnimation.Draw(spriteBatch);
+            LaserAnimation.Draw(spriteBatch, 0f);
         }
 
     }

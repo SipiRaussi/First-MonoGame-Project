@@ -18,20 +18,11 @@ namespace TopDownShooter
 
         private Player player;
 
-        private GamePadState currentGamePadState;
-        private GamePadState previousGamePadState;
+        //Input device states
         private KeyboardState currentKeyboardState;
         private KeyboardState previousKeyboardState;
         private MouseState currentMouseState;
         private MouseState previosMouseState;
-
-        private float playerMoveSpeed;
-
-        // Image used to display the static background
-        //private Texture2D mainBackground;
-        //private Rectangle rectBackground;
-        //private float scale = 1f;
-        //private ParallaxingBackground bgLayer1, bgLayer2;
 
         //Enemies
         private Texture2D enemyTexture;
@@ -60,10 +51,6 @@ namespace TopDownShooter
             // Initialize player
             player = new Player();
 
-            // Background
-            //bgLayer1 = new ParallaxingBackground();
-            //bgLayer2 = new ParallaxingBackground();
-
             // Initialize the enemies list
             enemies = new List<Enemy>();
             // Set the time keepers to zero
@@ -72,9 +59,7 @@ namespace TopDownShooter
             enemySpawnTime = TimeSpan.FromSeconds(1.0f);
             // Initialize our random number generator
             random = new Random();
-
-
-            playerMoveSpeed = 8.0f;
+            
             TouchPanel.EnabledGestures = GestureType.FreeDrag;
             base.Initialize();
         }
@@ -93,15 +78,10 @@ namespace TopDownShooter
             Texture2D playerTexture = Content.Load<Texture2D>("Graphics/SonicFrames");
             playerAnimation.Initialize(playerTexture, Vector2.Zero, 32, 40, 8, 75, Color.White, 1f, true);
 
-            Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, 
+            Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X + 100, 
                                                  GraphicsDevice.Viewport.TitleSafeArea.Y
                                                  + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             player.Initialize(playerAnimation, playerPosition);
-            // Load the parallaxing background
-            //bgLayer1.Initialize(Content, "Graphics/bgLayer1", GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, -1);
-            //bgLayer2.Initialize(Content, "Graphics/bgLayer2", GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, -2);
-
-            //mainBackground = Content.Load<Texture2D>("Graphics/mainbackground");
 
             enemyTexture = Content.Load<Texture2D>("Graphics/Shadow");
 
@@ -124,84 +104,33 @@ namespace TopDownShooter
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
 
             // Save the previous state of the keyboard and game pad so we can determine single key/button presses
-            previousGamePadState = currentGamePadState;
             previousKeyboardState = currentKeyboardState;
             previosMouseState = currentMouseState;
-            // Read the current state of the keboard and gamepad and store it
+
+            // Read the current state of the keyboard and gamepad and store it
             currentKeyboardState = Keyboard.GetState();
-            currentGamePadState = GamePad.GetState(PlayerIndex.One);
             currentMouseState = Mouse.GetState();
 
             // Update the player
             UpdatePlayer(gameTime);
-            // Update the parallaxing background
-            //bgLayer1.Update(gameTime);
-            //bgLayer2.Update(gameTime);
+
             // Update the enemies
             UpdateEnemy(gameTime);
+
             // Update the collision
             UpdateCollision();
 
-            base.Update(gameTime);
+            //base.Update(gameTime);
         }
 
         private void UpdatePlayer(GameTime gameTime)
         {
-            player.Update(gameTime);
-
-            // Get thumbstick controls
-            player.Position.X += currentGamePadState.ThumbSticks.Left.X * playerMoveSpeed;
-            player.Position.Y -= currentGamePadState.ThumbSticks.Left.Y * playerMoveSpeed;
-
-            // Use the Keyboard / Dpad
-            if (currentKeyboardState.IsKeyDown(Keys.Left))
-            {
-                player.Position.X -= playerMoveSpeed;
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.Right))
-            {
-                player.Position.X += playerMoveSpeed;
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.Up))
-            {
-                player.Position.Y -= playerMoveSpeed;
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.Down))
-            {
-                player.Position.Y += playerMoveSpeed;
-            }
-
-            // Make sure that the player does not go out of bounds
-            player.Position.X = MathHelper.Clamp(player.Position.X, 0, GraphicsDevice.Viewport.Width - player.Width);
-            player.Position.Y = MathHelper.Clamp(player.Position.Y, 0, GraphicsDevice.Viewport.Height - player.Height);
-
-            // Windows Touch Gesture for MonoGame
-            while (TouchPanel.IsGestureAvailable)
-            {
-                GestureSample gesture = TouchPanel.ReadGesture();
-
-                if(gesture.GestureType == GestureType.FreeDrag)
-                {
-                    player.Position += gesture.Delta;
-                }
-            }
-
-            // Get Mouse State then Capture the button type and Respond Button Press
-            Vector2 mousePosition = new Vector2(currentMouseState.X, currentMouseState.Y);
-
-            if(currentMouseState.LeftButton == ButtonState.Pressed)
-            {
-                Vector2 posDelta = mousePosition - player.Position;
-                posDelta.Normalize();
-                posDelta *= playerMoveSpeed;
-                player.Position += posDelta;
-            }
+            player.Update(gameTime,currentKeyboardState, previousKeyboardState, currentMouseState);
         }
 
         private void UpdateEnemy(GameTime gameTime)

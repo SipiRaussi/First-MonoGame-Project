@@ -25,6 +25,14 @@ namespace TopDownShooter
         public bool Looping;
         public Vector2 Position;
 
+        public Rectangle DestinationRect
+        {
+            get
+            {
+                return destinationRect;
+            }
+        }
+
         public void Initialize(Texture2D texture, Vector2 position, int frameWidth, int frameHeight, int frameCount, int frameTime, Color color, float scale, bool looping)
         {
             this.color = color;
@@ -85,12 +93,12 @@ namespace TopDownShooter
                                             (int)(FrameHeight * scale));
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch, float rotation)
         {
             // Only draw the animation when we are active
             if(Active)
             {
-                spriteBatch.Draw(spriteStrip, destinationRect, sourceRect, color);
+                spriteBatch.Draw(spriteStrip, destinationRect, sourceRect, color, rotation, new Vector2(FrameWidth / 2, FrameHeight / 2 ), SpriteEffects.None, 1f);
             }
         }
     }
