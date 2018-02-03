@@ -9,8 +9,8 @@
     <ProjectGuid>{DAD64DE9-4BE7-4D33-B042-4E30B1D18CDB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Game1</RootNamespace>
-    <AssemblyName>Game1</AssemblyName>
+    <RootNamespace>TopDownShooter</RootNamespace>
+    <AssemblyName>TopDownsShooter</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -41,9 +41,15 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>TopDownShooter.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Animation.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="GameScreens\GameScreen.cs" />
+    <Compile Include="GameScreens\ScreenManager.cs" />
+    <Compile Include="GameScreens\SplashScreen.cs" />
     <Compile Include="TopDownShooter.cs" />
     <Compile Include="Laser.cs" />
     <Compile Include="ParallaxingBackground.cs" />
