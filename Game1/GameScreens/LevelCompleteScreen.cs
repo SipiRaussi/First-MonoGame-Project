@@ -9,16 +9,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TopDownShooter
 {
-    public class SplashScreen : Screen
+    public class LevelCompleteScreen : Screen
     {
-        private Texture2D image;
-        private string path;
-
         public override void LoadContent()
         {
             base.LoadContent();
-            path = "Graphics/SonicFrames";
-            image = content.Load<Texture2D>(path);
         }
 
         public override void UnloadContent()
@@ -33,7 +28,7 @@ namespace TopDownShooter
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(image, Vector2.Zero, Color.White);
+            base.Draw(spriteBatch);
         }
     }
 }

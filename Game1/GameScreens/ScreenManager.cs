@@ -34,7 +34,7 @@ namespace TopDownShooter
         public ContentManager Content { private set; get; }
         public Vector2 Dimensions { private set; get; }
 
-        private GameScreen currentScreen;
+        private Screen currentScreen;
 
         public void LoadContent(ContentManager content)
         {

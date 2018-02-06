@@ -5,33 +5,30 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace TopDownShooter
 {
-    public class GameScreen
+    public class GameScreen : Screen
     {
-        protected ContentManager content;
-
-        public virtual void LoadContent()
+        public override void LoadContent()
         {
-            content = new ContentManager(ScreenManager.Instance.Content.ServiceProvider, "Content");
+            base.LoadContent();
         }
 
-        public virtual void UnloadContent()
+        public override void UnloadContent()
         {
-            content.Unload();
+            base.UnloadContent();
         }
 
-        public virtual void Update(GameTime gametime)
+        public override void Update(GameTime gametime)
         {
-
+            base.Update(gametime);
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-
+            base.Draw(spriteBatch);
         }
     }
 }
