@@ -62,7 +62,8 @@ namespace Shooter
 
             void CalculatePlayerRotation()
             {
-                Vector2 pointingVector = new Vector2(currentMouseState.Position.X +32- (Position.X + Width / 2), currentMouseState.Position.Y - (Position.Y - Height / 2));
+                Vector2 pointingVector = new Vector2(currentMouseState.Position.X - ((Position.X - Width / 2)), currentMouseState.Position.Y - (Position.Y - Height / 2));
+                //pointingVector.Normalize();
                 rotation = (float)Math.Atan2(pointingVector.X, -pointingVector.Y);
             }
 
