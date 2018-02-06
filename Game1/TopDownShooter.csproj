@@ -126,6 +126,7 @@
     <Content Include="Content\Graphics\Shadow.png" />
     <Content Include="Content\Graphics\SonicFrames.png" />
     <Content Include="Content\Graphics\SonicOneFrame.png" />
+    <Content Include="Content\Graphics\SplashScreen.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Graphics\Shadow.xnb" />
