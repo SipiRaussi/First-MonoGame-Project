@@ -48,6 +48,11 @@
     <Compile Include="Animation.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="GameScreens\GameScreen.cs" />
+    <Compile Include="GameScreens\Screen.cs" />
+    <Compile Include="GameScreens\LevelCompleteScreen.cs" />
+    <Compile Include="GameScreens\LevelMenuScreen.cs" />
+    <Compile Include="GameScreens\MainMenuScreen.cs" />
+    <Compile Include="GameScreens\OptionsScreen.cs" />
     <Compile Include="GameScreens\ScreenManager.cs" />
     <Compile Include="GameScreens\SplashScreen.cs" />
     <Compile Include="TopDownShooter.cs" />
