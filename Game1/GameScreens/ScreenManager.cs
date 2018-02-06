@@ -14,6 +14,12 @@ namespace TopDownShooter
     {
         // Singleton of this class
         private static ScreenManager instance;
+        public ContentManager Content { private set; get; }
+        public Vector2 Dimensions { private set; get; }
+
+        private XmlManager<GameScreen> xmlGameScreenManager;
+        private Screen currentScreen;
+
         public static ScreenManager Instance
         {
             get
@@ -25,16 +31,17 @@ namespace TopDownShooter
                 return instance;
             }
         }
+
         private ScreenManager()
         {
             Dimensions = new Vector2(640, 480);
             currentScreen = new SplashScreen();
+            xmlGameScreenManager = new XmlManager<GameScreen>();
+            xmlGameScreenManager.Type = currentScreen.Type;
+            currentScreen = xmlGameScreenManager.Load("./Load/SplashScreen");
         }
 
-        public ContentManager Content { private set; get; }
-        public Vector2 Dimensions { private set; get; }
 
-        private Screen currentScreen;
 
         public void LoadContent(ContentManager content)
         {

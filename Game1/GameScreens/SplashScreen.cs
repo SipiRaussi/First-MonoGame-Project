@@ -12,13 +12,12 @@ namespace TopDownShooter
     public class SplashScreen : Screen
     {
         private Texture2D image;
-        private string path;
+        public string Path;
 
         public override void LoadContent()
         {
             base.LoadContent();
-            path = "Graphics/SonicFrames";
-            image = content.Load<Texture2D>(path);
+            image = content.Load<Texture2D>(Path);
         }
 
         public override void UnloadContent()
