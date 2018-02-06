@@ -2,35 +2,36 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using TopDownShooter;
 
-namespace Shooter
+namespace TopDownShooter
 {
     class Player
     {
         //public Texture2D PlayerTexture;
         public Animation PlayerAnimation;
-        public Vector2 Position;
-        public bool Active;
-        public int Health;
-        public int Width { get { return PlayerAnimation.FrameWidth; } }
-        public int Height { get { return PlayerAnimation.FrameHeight; } }
+        public Vector2   Position;
+        public bool      Active;
+        public int       Health;
+        public int       Width { get { return PlayerAnimation.FrameWidth; } }
+        public int       Height { get { return PlayerAnimation.FrameHeight; } }
 
         //Pixels per second
-        private float moveSpeed;
-        private float rotation;
+        private float    moveSpeed;
+        private float    rotation;
+
+        //Weapon for shooting baddies
+        private Weapon   currentWeapon;
 
         public void Initialize(Animation animation, Vector2 position)
         {
+            //Initialize variables
             PlayerAnimation = animation;
-            // Set the starting position of the player around the middle of the screen and to the back
             Position = position;
-            // Set player to be active
             Active = true;
-            // set player health
             Health = 100;
-            // Set player movement speed
             moveSpeed = 200.0f;
+
+            currentWeapon = new Blaster();
         }
 
         // Update player animation
@@ -39,7 +40,7 @@ namespace Shooter
             PlayerAnimation.Position = Position;
             PlayerAnimation.Update(gameTime);
 
-            // Use the Keyboard
+            //Check keyboard inputs
             if (currentKeyboardState.IsKeyDown(Keys.A))
             {
                 Position.X -= moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -62,15 +63,19 @@ namespace Shooter
 
             void CalculatePlayerRotation()
             {
-                Vector2 pointingVector = new Vector2(currentMouseState.Position.X - ((Position.X - Width / 2)), currentMouseState.Position.Y - (Position.Y - Height / 2));
+                //Make a vector from player 
+                Vector2 pointingVector = new Vector2(currentMouseState.Position.X - (Position.X - Width / 2), currentMouseState.Position.Y - (Position.Y - Height / 2));
                 //pointingVector.Normalize();
                 rotation = (float)Math.Atan2(pointingVector.X, -pointingVector.Y);
             }
 
+            //Rotation calculation
             CalculatePlayerRotation();
+
+
             if (currentMouseState.LeftButton == ButtonState.Pressed)
             {
-                //Call shoot or something
+                currentWeapon.Shoot();
             }
         }
 
