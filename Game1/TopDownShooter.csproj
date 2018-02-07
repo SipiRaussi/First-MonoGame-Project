@@ -46,6 +46,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Animation.cs" />
+    <Compile Include="Components\Image.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="GameScreens\GameScreen.cs" />
     <Compile Include="GameScreens\Screen.cs" />
