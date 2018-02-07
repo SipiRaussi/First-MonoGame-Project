@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace TopDownShooter
@@ -12,6 +14,7 @@ namespace TopDownShooter
     public class SplashScreen : Screen
     {
         private Texture2D image;
+        [XmlElement("Path")]
         public string Path;
 
         public override void LoadContent()
