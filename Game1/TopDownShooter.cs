@@ -151,6 +151,17 @@ namespace TopDownShooter
             }
         }
 
+        private void UpdateProjectiles(GameTime gameTime)
+        {
+            //Update projectiles
+            for (int i = 0; i < Projectile.Projectiles.Count; i++)
+            {
+                Projectile.Projectiles[i].Update(gameTime);
+            }
+
+            //TODO: Collision to enemies, remember hot/cold split
+        }
+
         private void UpdateCollision()
         {
             //Use the Rectangle's built-in intersect function to determine if two objects are overlapping
@@ -226,6 +237,12 @@ namespace TopDownShooter
 
             //Draw player
             player.Draw(spriteBatch);
+
+            //Draw projectiles
+            for (int i = 0; i < Projectile.Projectiles.Count; i++)
+            {
+                Projectile.Projectiles[i].Draw(spriteBatch);
+            }
 
             spriteBatch.End();
 
