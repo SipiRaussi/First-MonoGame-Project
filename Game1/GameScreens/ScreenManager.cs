@@ -12,13 +12,21 @@ namespace TopDownShooter
 {
     public class ScreenManager
     {
-        // Singleton of this class
+        //Singleton of this class
         private static ScreenManager instance;
+
+        //This handles all the content of this project
         public ContentManager Content { private set; get; }
+
+        //Screen widht and height
+        private Screen currentScreen;
         public Vector2 Dimensions { private set; get; }
+        public GraphicsDevice GraphicsDevice;
+        public SpriteBatch SpriteBatch;
 
         private XmlManager<Screen> xmlGameScreenManager;
-        private Screen currentScreen;
+
+
 
         public static ScreenManager Instance
         {
@@ -45,12 +53,16 @@ namespace TopDownShooter
 
         public void LoadContent(ContentManager content)
         {
+            //Use TopDownShooters ContentManager
             Content = new ContentManager(content.ServiceProvider, "Content");
+
+            //Loads current screens content
             currentScreen.LoadContent();
         }
 
         public void UnloadContent()
         {
+            //Unloads current screens content
             currentScreen.UnloadContent();
         }
 
