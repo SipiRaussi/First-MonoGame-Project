@@ -9,6 +9,7 @@ namespace TopDownShooter
     abstract class Projectile
     {
         private static List<Projectile> projectiles;
+        public static Texture2D blasterTexture;
 
         public Animation Animation;
         public Vector2 Position;
@@ -19,22 +20,46 @@ namespace TopDownShooter
         private int range;
 
         //The width and height of the image
-        public int Width { get { return Animation.FrameWidth; } }        
+        public int Width { get { return Animation.FrameWidth; } }
         public int Height { get { return Animation.FrameHeight; } }
 
-        public static List<Projectile> Projectiles { get; private set; }
-
-        public Projectile()
+        public static List<Projectile> Projectiles
         {
-            if (!projectiles.Contains(this))
+            get
             {
-                projectiles.Add(this);
+                return projectiles;
+            }
+            protected set
+            {
+                projectiles = value;
             }
         }
 
-        public virtual void Initialize(Animation animation, Vector2 position)
+        public Projectile()
         {
-            Animation = animation;
+            if (Projectiles == null)
+            {
+                Projectiles = new List<Projectile>();
+            }
+        }
+
+        public virtual void Initialize(Vector2 position)
+        {
+            if (!Projectiles.Contains(this))
+            {
+                Projectiles.Add(this);
+            }
+
+            Animation = new Animation();
+            Animation.Initialize(blasterTexture,
+                Position,
+                32,
+                40,
+                1,
+                30,
+                Color.White,
+                1f,
+                true);
             Position = position;
             Active = true;
         }
@@ -53,8 +78,26 @@ namespace TopDownShooter
         {
             if (Active)
             {
-                Animation.Draw(spriteBatch, 0f); 
+                Animation.Draw(spriteBatch, 0f);
             }
         }
+
+        /*public virtual void AddProjectile()
+        {
+            Animation animation = new Animation();
+            animation.Initialize(blasterTexture,
+                Position,
+                32,
+                40,
+                1,
+                30,
+                Color.White,
+                1f,
+                true);
+
+            //Projectile projectile = new Projectile();
+
+            this.Initialize(animation, Position);
+        }*/
     }
 }

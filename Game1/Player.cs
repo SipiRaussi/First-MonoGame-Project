@@ -18,6 +18,7 @@ namespace TopDownShooter
         //Pixels per second
         private float    moveSpeed;
         private float    rotation;
+        private Vector2  pointingVector;
 
         //Weapon for shooting baddies
         private Weapon   currentWeapon;
@@ -64,7 +65,7 @@ namespace TopDownShooter
             void CalculatePlayerRotation()
             {
                 //Make a vector from player 
-                Vector2 pointingVector = new Vector2(currentMouseState.Position.X - (Position.X - Width / 2), currentMouseState.Position.Y - (Position.Y - Height / 2));
+                pointingVector = new Vector2(currentMouseState.Position.X - (Position.X - Width / 2), currentMouseState.Position.Y - (Position.Y - Height / 2));
                 //pointingVector.Normalize();
                 rotation = (float)Math.Atan2(pointingVector.X, -pointingVector.Y);
             }
@@ -72,16 +73,18 @@ namespace TopDownShooter
             //Rotation calculation
             CalculatePlayerRotation();
 
+            currentWeapon.Update(Position);
 
             if (currentMouseState.LeftButton == ButtonState.Pressed)
             {
-                currentWeapon.Shoot();
+                currentWeapon.Shoot(pointingVector, rotation);
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             PlayerAnimation.Draw(spriteBatch, rotation);
+            //TODO: draw weapon
         }
 
     }

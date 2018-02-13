@@ -29,6 +29,9 @@ namespace TopDownShooter
         private Texture2D             enemyTexture;
         private List<Enemy>           enemies;
 
+        //Projectiles
+        //private Texture2D             blasterTexture;
+
         //The rate at which the enemies appear
         private TimeSpan              enemySpawnTime;
         private TimeSpan              previousSpawnTime;
@@ -64,7 +67,9 @@ namespace TopDownShooter
             enemySpawnTime = TimeSpan.FromSeconds(1.0f);
 
             //Initialize our random number generator
-            random = new Random();            
+            random = new Random();
+
+            LoadContent();
         }
 
         /// <summary>
@@ -89,6 +94,8 @@ namespace TopDownShooter
 
             //Load enemy texture
             enemyTexture = Content.Load<Texture2D>("Graphics/Shadow");
+
+            Projectile.blasterTexture = Content.Load<Texture2D>("Graphics/SonicOneFrame");
         }
 
         /// <summary>
@@ -128,6 +135,9 @@ namespace TopDownShooter
 
             //Update the collision
             UpdateCollision();
+
+            //Update projectiles
+            UpdateProjectiles(gameTime);
         }
 
         private void UpdateEnemy(GameTime gameTime)
@@ -154,9 +164,12 @@ namespace TopDownShooter
         private void UpdateProjectiles(GameTime gameTime)
         {
             //Update projectiles
-            for (int i = 0; i < Projectile.Projectiles.Count; i++)
+            if (Projectile.Projectiles != null)
             {
-                Projectile.Projectiles[i].Update(gameTime);
+                for (int i = 0; i < Projectile.Projectiles.Count; i++)
+                {
+                    Projectile.Projectiles[i].Update(gameTime);
+                } 
             }
 
             //TODO: Collision to enemies, remember hot/cold split
@@ -239,9 +252,12 @@ namespace TopDownShooter
             player.Draw(spriteBatch);
 
             //Draw projectiles
-            for (int i = 0; i < Projectile.Projectiles.Count; i++)
+            if (Projectile.Projectiles != null)
             {
-                Projectile.Projectiles[i].Draw(spriteBatch);
+                for (int i = 0; i < Projectile.Projectiles.Count; i++)
+                {
+                    Projectile.Projectiles[i].Draw(spriteBatch);
+                } 
             }
 
             spriteBatch.End();
