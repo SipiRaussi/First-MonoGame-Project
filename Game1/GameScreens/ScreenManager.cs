@@ -49,8 +49,6 @@ namespace TopDownShooter
             currentScreen = xmlGameScreenManager.Load("./Load/SplashScreen.xml");
         }
 
-
-
         public void LoadContent(ContentManager content)
         {
             //Use TopDownShooters ContentManager

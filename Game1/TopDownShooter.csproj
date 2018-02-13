@@ -130,6 +130,20 @@
     <Content Include="Content\Graphics\SplashScreen.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Fonts\Ubuntu-L.spritefont" />
+    <None Include="Content\Fonts\Ubuntu\Ubuntu-B.ttf" />
+    <None Include="Content\Fonts\Ubuntu\Ubuntu-BI.ttf" />
+    <None Include="Content\Fonts\Ubuntu\Ubuntu-C.ttf" />
+    <None Include="Content\Fonts\Ubuntu\Ubuntu-L.ttf" />
+    <None Include="Content\Fonts\Ubuntu\Ubuntu-LI.ttf" />
+    <None Include="Content\Fonts\Ubuntu\Ubuntu-M.ttf" />
+    <None Include="Content\Fonts\Ubuntu\Ubuntu-MI.ttf" />
+    <None Include="Content\Fonts\Ubuntu\Ubuntu-R.ttf" />
+    <None Include="Content\Fonts\Ubuntu\Ubuntu-RI.ttf" />
+    <None Include="Content\Fonts\Ubuntu\UbuntuMono-B.ttf" />
+    <None Include="Content\Fonts\Ubuntu\UbuntuMono-BI.ttf" />
+    <None Include="Content\Fonts\Ubuntu\UbuntuMono-R.ttf" />
+    <None Include="Content\Fonts\Ubuntu\UbuntuMono-RI.ttf" />
     <None Include="Content\Graphics\Shadow.xnb" />
     <None Include="Content\Graphics\SonicFrames.xnb" />
     <None Include="Content\Graphics\SonicOneFrame.xnb" />
@@ -137,6 +151,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

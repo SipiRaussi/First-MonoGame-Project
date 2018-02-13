@@ -61,3 +61,10 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/SplashScreen.png
 
+#begin Fonts/Ubuntu-L.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Ubuntu-L.spritefont
+
