@@ -163,16 +163,45 @@ namespace TopDownShooter
 
         private void UpdateProjectiles(GameTime gameTime)
         {
+            List<int> projectilesToDestroy = new List<int>();
+
             //Update projectiles
             if (Projectile.Projectiles != null)
             {
                 for (int i = 0; i < Projectile.Projectiles.Count; i++)
                 {
                     Projectile.Projectiles[i].Update(gameTime);
-                } 
-            }
+                    for (int j = 0; j < enemies.Count; j++)
+                    {
+                        Rectangle rectangle1;
+                        Rectangle rectangle2;
 
-            //TODO: Collision to enemies, remember hot/cold split
+                        //Projectile rectangle
+                        rectangle1 = new Rectangle((int)Projectile.Projectiles[i].Position.X,
+                            (int)Projectile.Projectiles[i].Position.Y,
+                            Projectile.Projectiles[i].Animation.FrameWidth,
+                            Projectile.Projectiles[i].Animation.FrameHeight);
+
+                        //Enemy rectangle
+                        rectangle2 = new Rectangle((int)enemies[j].Position.X,
+                                           (int)enemies[j].Position.Y,
+                                           enemies[j].Width,
+                                           enemies[j].Height);
+
+                        if (rectangle1.Intersects(rectangle2))
+                        {
+                            enemies[j].Health -= Projectile.Projectiles[i].Damage;
+                            projectilesToDestroy.Add(i);
+                        }
+                    }
+                }
+
+                //Remove destroyed projectiles
+                for (int i = 0; i < projectilesToDestroy.Count; i++)
+                {
+                    Projectile.Projectiles.RemoveAt(projectilesToDestroy[i]);
+                }
+            }
         }
 
         private void UpdateCollision()

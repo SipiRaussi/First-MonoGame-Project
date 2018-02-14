@@ -33,6 +33,7 @@ namespace TopDownShooter
             moveSpeed = 200.0f;
 
             currentWeapon = new Blaster();
+            currentWeapon.Initialize();
         }
 
         // Update player animation
@@ -77,7 +78,7 @@ namespace TopDownShooter
 
             if (currentMouseState.LeftButton == ButtonState.Pressed)
             {
-                currentWeapon.Shoot(pointingVector, rotation);
+                currentWeapon.Shoot(gameTime, pointingVector, rotation);
             }
         }
 

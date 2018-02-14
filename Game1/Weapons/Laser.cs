@@ -11,10 +11,7 @@ namespace TopDownShooter
         //Inherit the constructor
         public Laser() : base()
         {
-            if (Projectiles == null)
-            {
-                Projectiles = new List<Projectile>();
-            }
+
         }
     }
 }

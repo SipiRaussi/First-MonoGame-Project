@@ -14,8 +14,10 @@ namespace TopDownShooter
         public Animation Animation;
         public Vector2 Position;
 
-        public bool Active;
-        private float MoveSpeed = 30f;
+        private bool active;
+        private Vector2 direction;
+        private float rotation;
+        private float MoveSpeed = 640f;
         private int damage = 10;
         private int range;
 
@@ -35,6 +37,25 @@ namespace TopDownShooter
             }
         }
 
+        public bool Active
+        {
+            get
+            {
+                return active;
+            }
+            set
+            {
+                active = value;
+
+                if (active == false)
+                {
+                    projectiles.Remove(this);
+                }
+            }
+        }
+
+        public int Damage { get => damage; private set => damage = value; }
+
         public Projectile()
         {
             if (Projectiles == null)
@@ -43,8 +64,9 @@ namespace TopDownShooter
             }
         }
 
-        public virtual void Initialize(Vector2 position)
+        public virtual void Initialize(Vector2 position, Vector2 direction, float rotation)
         {
+            //Check if the projectile exists already, if not
             if (!Projectiles.Contains(this))
             {
                 Projectiles.Add(this);
@@ -62,13 +84,16 @@ namespace TopDownShooter
                 true);
             Position = position;
             Active = true;
+            this.direction = direction;
+            this.direction.Normalize();
+            this.rotation = rotation;
         }
 
         public virtual void Update(GameTime gameTime)
         {
             if (Active)
             {
-                Position.X += MoveSpeed;
+                Position += direction * MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Animation.Position = Position;
                 Animation.Update(gameTime); 
             }
@@ -78,26 +103,8 @@ namespace TopDownShooter
         {
             if (Active)
             {
-                Animation.Draw(spriteBatch, 0f);
+                Animation.Draw(spriteBatch, rotation);
             }
         }
-
-        /*public virtual void AddProjectile()
-        {
-            Animation animation = new Animation();
-            animation.Initialize(blasterTexture,
-                Position,
-                32,
-                40,
-                1,
-                30,
-                Color.White,
-                1f,
-                true);
-
-            //Projectile projectile = new Projectile();
-
-            this.Initialize(animation, Position);
-        }*/
     }
 }

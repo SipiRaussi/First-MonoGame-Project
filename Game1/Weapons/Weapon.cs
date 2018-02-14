@@ -10,11 +10,25 @@ namespace TopDownShooter
         public Vector2   Position;
         public bool      Active;
 
+        private float rateOfFire = 800;
 
-        public virtual void Shoot(Vector2 dir, float rotation)
+        TimeSpan spawnTime;
+        TimeSpan previousSpawnTime;
+
+        public virtual void Initialize()
         {
-            Projectile proj = new Laser();
-            proj.Initialize(Position);
+            spawnTime = TimeSpan.FromSeconds(60 / rateOfFire);
+            previousSpawnTime = TimeSpan.Zero;
+        }
+
+        public virtual void Shoot(GameTime gameTime, Vector2 dir, float rotation)
+        {
+            if (gameTime.TotalGameTime - previousSpawnTime > spawnTime)
+            {
+                previousSpawnTime = gameTime.TotalGameTime;
+                Projectile proj = new Laser();
+                proj.Initialize(Position, dir, rotation); 
+            }
         }
 
         public virtual void Update(Vector2 position)
