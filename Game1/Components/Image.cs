@@ -13,6 +13,8 @@ namespace TopDownShooter
 {
     public class Image
     {
+        public bool IsActive;
+
         //For if we want text in the image
         public string Text, FontName, Path;
         private SpriteFont spriteFont;
@@ -23,6 +25,11 @@ namespace TopDownShooter
         public Rectangle SourceRectangle;
         public float Alpha;
 
+        //Effects for the image
+        public string Effects;
+        private Dictionary<string, ImageEffect> effectList;
+        public FadeEffect FadeEffect;
+
         //Images position on screen and scale
         public Vector2 Position, Scale;
         private Vector2 origin;
@@ -30,12 +37,50 @@ namespace TopDownShooter
         //Use ContentManager for loading image
         private ContentManager content;
 
+        //Final image
         private RenderTarget2D renderTarget;
 
-        //Default Ccnstructor
+        //Set all the effect for the image
+        private void SetEffect<T>(ref T effect)
+        {
+            if (effect == null)
+            {
+                effect = (T)Activator.CreateInstance(typeof(T));
+            }
+            else
+            {
+                (effect as ImageEffect).IsActive = true;
+                Image obj = this;
+                (effect as ImageEffect).LoadContent(ref obj);
+            }
+
+            effectList.Add(effect.GetType().ToString().Replace("TopDownShooter.", ""), effect as ImageEffect);
+        }
+
+
+        public void ActivateEffect(string effect)
+        {
+            if (effectList.ContainsKey(effect))
+            {
+                effectList[effect].IsActive = true;
+                Image obj = this;
+                effectList[effect].LoadContent(ref obj);
+            }
+        }
+
+        public void DeactivateEffect(string effect)
+        {
+            if(effectList.ContainsKey(effect))
+            {
+                effectList[effect].IsActive = false;
+                effectList[effect].UnloadContent();
+            }
+        }
+
+        //Default Constructor
         public Image()
         {
-            Path = Text = String.Empty;
+            Path = Text = Effects =String.Empty;
             FontName = "Fonts/Ubuntu-L";
             Position = Vector2.Zero;
             Scale = Vector2.One;
@@ -44,7 +89,7 @@ namespace TopDownShooter
         }
 
         public void LoadContent()
-        {
+        { 
             //Use ScreenManager ContentManager for loading content
             content = new ContentManager(ScreenManager.Instance.Content.ServiceProvider, "Content");
 
@@ -54,13 +99,18 @@ namespace TopDownShooter
                 Texture = content.Load<Texture2D>(Path);
             }
 
+            if (content.Load<SpriteFont>(FontName).ToString() != FontName)
+            {
+                FontName = "Fonts/Arial";
+            }
+
             //Get font
             spriteFont = content.Load<SpriteFont>(FontName);
 
-            //Get textures and font widht and height
+            //Get textures and font width and height
             Vector2 dimensions = Vector2.Zero;
 
-            //Get texture and font widht
+            //Get texture and font width
             if (Texture != null)
             {
                 dimensions.X += Texture.Width;
@@ -102,6 +152,18 @@ namespace TopDownShooter
             //This makes text and image one texture
             Texture = renderTarget;
             ScreenManager.Instance.GraphicsDevice.SetRenderTarget(null);
+
+            //Apply image effects
+            SetEffect<FadeEffect>(ref FadeEffect);
+            if(Effects != String.Empty)
+            {
+                string[] split = Effects.Split(':');
+
+                foreach (string item in split)
+                {
+                    ActivateEffect(item);
+                }
+            }
         }
 
         public void UnloadContent()

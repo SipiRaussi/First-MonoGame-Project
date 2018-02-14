@@ -68,3 +68,10 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Ubuntu-L.spritefont
 
+#begin Fonts/Arial.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Arial.spritefont
+

@@ -46,7 +46,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Animation.cs" />
+    <Compile Include="Components\FadeEffect.cs" />
     <Compile Include="Components\Image.cs" />
+    <Compile Include="Components\ImageEffect.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="GameScreens\GameScreen.cs" />
     <Compile Include="GameScreens\Screen.cs" />
@@ -130,6 +132,7 @@
     <Content Include="Content\Graphics\SplashScreen.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Fonts\Arial.spritefont" />
     <None Include="Content\Fonts\Ubuntu-L.spritefont" />
     <None Include="Content\Fonts\Ubuntu\Ubuntu-B.ttf" />
     <None Include="Content\Fonts\Ubuntu\Ubuntu-BI.ttf" />
