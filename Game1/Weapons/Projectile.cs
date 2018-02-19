@@ -9,17 +9,18 @@ namespace TopDownShooter
     abstract class Projectile
     {
         private static List<Projectile> projectiles;
-        public static Texture2D blasterTexture;
+        public static Texture2D         blasterTexture;
 
-        public Animation Animation;
-        public Vector2 Position;
+        public Animation                Animation;
+        public Vector2                  Position;
 
-        private bool active;
-        private Vector2 direction;
-        private float rotation;
-        private float MoveSpeed = 640f;
-        private int damage = 10;
-        private int range;
+        protected bool                  active;
+        protected Vector2               direction;
+        protected float                 rotation;
+        protected float                 moveSpeed = 640f;
+        protected float                 traveledDistance = 0f;
+        protected float                 range = 200f;
+        protected int                   damage = 10;
 
         //The width and height of the image
         public int Width { get { return Animation.FrameWidth; } }
@@ -89,13 +90,38 @@ namespace TopDownShooter
             this.rotation = rotation;
         }
 
+        /// <summary>
+        /// Update positions.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public virtual void Update(GameTime gameTime)
         {
             if (Active)
             {
-                Position += direction * MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //Calculate the distance to move
+                float deltaAmt = moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                //Keep track of distance
+                traveledDistance += deltaAmt;
+
+                //Translate position
+                Position += direction * deltaAmt;
+
+                //Translate and update animation
                 Animation.Position = Position;
                 Animation.Update(gameTime); 
+            }
+        }
+
+        /// <summary>
+        /// Tests if the projectile is at the end of its range.
+        /// </summary>
+        public virtual void RangeCheck()
+        {
+            //Check for end of range
+            if (traveledDistance >= range)
+            {
+                Active = false;
             }
         }
 

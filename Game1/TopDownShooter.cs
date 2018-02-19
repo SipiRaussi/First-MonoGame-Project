@@ -196,10 +196,16 @@ namespace TopDownShooter
                     }
                 }
 
+                //Range check
+                for (int i = 0; i < Projectile.Projectiles.Count; i++)
+                {
+                    Projectile.Projectiles[i].RangeCheck();
+                }
+
                 //Remove destroyed projectiles
                 for (int i = 0; i < projectilesToDestroy.Count; i++)
                 {
-                    Projectile.Projectiles.RemoveAt(projectilesToDestroy[i]);
+                    Projectile.Projectiles[i].Active = false;
                 }
             }
         }
