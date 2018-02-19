@@ -42,6 +42,10 @@ namespace TopDownShooter
         public TopDownShooter()
         {
             graphics = new GraphicsDeviceManager(this);
+            //graphics.PreferredBackBufferWidth = 1920;
+            //graphics.PreferredBackBufferHeight = 1080;
+            //graphics.ToggleFullScreen();
+            //graphics.ApplyChanges();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -68,6 +72,11 @@ namespace TopDownShooter
 
             //Initialize our random number generator
             random = new Random();
+
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.PreferredBackBufferHeight = 1080;
+            graphics.ToggleFullScreen();
+            graphics.ApplyChanges();
 
             LoadContent();
         }
@@ -168,6 +177,7 @@ namespace TopDownShooter
             //Update projectiles
             if (Projectile.Projectiles != null)
             {
+                //Check for collisions with enemies
                 for (int i = 0; i < Projectile.Projectiles.Count; i++)
                 {
                     Projectile.Projectiles[i].Update(gameTime);
@@ -190,6 +200,7 @@ namespace TopDownShooter
 
                         if (rectangle1.Intersects(rectangle2))
                         {
+                            //Subratct health and mark projectile for deactivation
                             enemies[j].Health -= Projectile.Projectiles[i].Damage;
                             projectilesToDestroy.Add(i);
                         }

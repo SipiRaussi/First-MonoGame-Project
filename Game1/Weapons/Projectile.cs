@@ -19,7 +19,7 @@ namespace TopDownShooter
         protected float                 rotation;
         protected float                 moveSpeed = 640f;
         protected float                 traveledDistance = 0f;
-        protected float                 range = 200f;
+        protected float                 range = 500f;
         protected int                   damage = 10;
 
         //The width and height of the image
