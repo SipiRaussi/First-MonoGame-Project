@@ -13,6 +13,11 @@ namespace TopDownShooter
     {
         public Type Type;
 
+        public XmlManager()
+        {
+            Type = typeof(T);
+        }
+
         public T Load(string path)
         {
             T instance;

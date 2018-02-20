@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace TopDownShooter
 {
@@ -31,6 +32,12 @@ namespace TopDownShooter
         {
             base.Update(gametime);
             Image.Update(gametime);
+
+            //Press Enter to change screen (current to back to it self)
+            if(Keyboard.GetState().IsKeyDown(Keys.Enter) && !ScreenManager.Instance.IsTransitioning)
+            {
+                ScreenManager.Instance.ChangeScreens(Type.Name);
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)

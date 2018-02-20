@@ -17,9 +17,12 @@ namespace TopDownShooter
         [XmlIgnore]
         public Type Type;
 
+        public string XmlPath;
+
         public Screen()
         {
             Type = GetType();
+            XmlPath = "./Load/" + Type.Name + ".xml";
         }
 
         public virtual void LoadContent()
