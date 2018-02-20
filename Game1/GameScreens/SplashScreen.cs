@@ -13,29 +13,29 @@ namespace TopDownShooter
 {
     public class SplashScreen : Screen
     {
-        private Texture2D image;
-        [XmlElement("Path")]
-        public string Path;
+        public Image Image;
 
         public override void LoadContent()
         {
             base.LoadContent();
-            image = content.Load<Texture2D>(Path);
+            Image.LoadContent();
         }
 
         public override void UnloadContent()
         {
             base.UnloadContent();
+            Image.UnloadContent();
         }
 
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
+            Image.Update(gametime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(image, Vector2.Zero, Color.White);
+            Image.Draw(spriteBatch);
         }
     }
 }

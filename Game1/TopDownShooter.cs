@@ -78,6 +78,16 @@ namespace TopDownShooter
         /// </summary>
         protected override void LoadContent()
         {
+            //Pass GraphicsDevice information to screen manager
+            ScreenManager.Instance.GraphicsDevice = GraphicsDevice;
+
+            //Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            ScreenManager.Instance.SpriteBatch = spriteBatch;
+
+            //Pass content to screen manager
+            ScreenManager.Instance.LoadContent(Content);
+
             //Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
