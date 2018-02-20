@@ -42,10 +42,6 @@ namespace TopDownShooter
         public TopDownShooter()
         {
             graphics = new GraphicsDeviceManager(this);
-            //graphics.PreferredBackBufferWidth = 1920;
-            //graphics.PreferredBackBufferHeight = 1080;
-            //graphics.ToggleFullScreen();
-            //graphics.ApplyChanges();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -73,8 +69,9 @@ namespace TopDownShooter
             //Initialize our random number generator
             random = new Random();
 
-            graphics.PreferredBackBufferWidth = 1920;
-            graphics.PreferredBackBufferHeight = 1080;
+            //Set window to match target resolution and set it to fullscreen
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
             graphics.ToggleFullScreen();
             graphics.ApplyChanges();
 
@@ -104,7 +101,7 @@ namespace TopDownShooter
             //Load enemy texture
             enemyTexture = Content.Load<Texture2D>("Graphics/Shadow");
 
-            Projectile.blasterTexture = Content.Load<Texture2D>("Graphics/SonicOneFrame");
+            Projectile.Texture = Content.Load<Texture2D>("Graphics/SonicOneFrame");
         }
 
         /// <summary>
@@ -151,7 +148,7 @@ namespace TopDownShooter
 
         private void UpdateEnemy(GameTime gameTime)
         {
-            //Spawn a new enemy evry 1.5 seconds
+            //Spawn a new enemy every 1.5 seconds
             if(gameTime.TotalGameTime - previousSpawnTime > enemySpawnTime)
             {
                 previousSpawnTime = gameTime.TotalGameTime;
@@ -162,7 +159,7 @@ namespace TopDownShooter
             //Update the enemies
             for(int enemyIndex = enemies.Count - 1; enemyIndex >= 0; enemyIndex--)
             {
-                enemies[enemyIndex].Update(gameTime);
+                enemies[enemyIndex].Update(gameTime,player.Position);
                 if(enemies[enemyIndex].Active == false)
                 {
                     enemies.RemoveAt(enemyIndex);
@@ -210,13 +207,27 @@ namespace TopDownShooter
                 //Range check
                 for (int i = 0; i < Projectile.Projectiles.Count; i++)
                 {
-                    Projectile.Projectiles[i].RangeCheck();
+                    if (Projectile.Projectiles[i].RangeCheck())
+                    {
+                        projectilesToDestroy.Add(i);
+                    }
                 }
 
                 //Remove destroyed projectiles
-                for (int i = 0; i < projectilesToDestroy.Count; i++)
+                if (Projectile.Projectiles.Count > 0)
                 {
-                    Projectile.Projectiles[i].Active = false;
+                    for (int i = 0; i < projectilesToDestroy.Count; i++)
+                    {
+                        //Test if the projectile still exists
+                        if (i < Projectile.Projectiles.Count)
+                        {
+                            Projectile.Projectiles[i].Active = false;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    } 
                 }
             }
         }
@@ -247,12 +258,6 @@ namespace TopDownShooter
 
                     //Since the enemy collided with the player destroy it
                     enemies[enemyIndex].Health = 0;
-
-                    //If the player health is less than zero we died
-                    if(player.Health <= 0)
-                    {
-                        player.Active = false;
-                    }
                 }
             }
         }
@@ -284,7 +289,7 @@ namespace TopDownShooter
         protected override void Draw(GameTime gameTime)
         {
             //Background color
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.DarkKhaki);
 
             spriteBatch.Begin();
 
@@ -303,7 +308,7 @@ namespace TopDownShooter
                 for (int i = 0; i < Projectile.Projectiles.Count; i++)
                 {
                     Projectile.Projectiles[i].Draw(spriteBatch);
-                } 
+                }
             }
 
             spriteBatch.End();

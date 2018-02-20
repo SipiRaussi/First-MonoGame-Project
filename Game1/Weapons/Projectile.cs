@@ -9,7 +9,7 @@ namespace TopDownShooter
     abstract class Projectile
     {
         private static List<Projectile> projectiles;
-        public static Texture2D         blasterTexture;
+        public static Texture2D         Texture;
 
         public Animation                Animation;
         public Vector2                  Position;
@@ -74,7 +74,7 @@ namespace TopDownShooter
             }
 
             Animation = new Animation();
-            Animation.Initialize(blasterTexture,
+            Animation.Initialize(Texture,
                 Position,
                 32,
                 40,
@@ -116,12 +116,16 @@ namespace TopDownShooter
         /// <summary>
         /// Tests if the projectile is at the end of its range.
         /// </summary>
-        public virtual void RangeCheck()
+        public virtual bool RangeCheck()
         {
             //Check for end of range
             if (traveledDistance >= range)
             {
-                Active = false;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

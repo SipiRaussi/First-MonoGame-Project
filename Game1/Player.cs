@@ -11,10 +11,12 @@ namespace TopDownShooter
         public Animation PlayerAnimation;
         public Vector2   Position;
         public bool      Active;
-        public int       Health;
+        private int      health;
+
+        //Height and width of the current frame
         public int       Width { get { return PlayerAnimation.FrameWidth; } }
         public int       Height { get { return PlayerAnimation.FrameHeight; } }
-
+        
         //Pixels per second
         private float    moveSpeed;
         private float    rotation;
@@ -22,6 +24,21 @@ namespace TopDownShooter
 
         //Weapon for shooting baddies
         private Weapon   currentWeapon;
+
+        public int Health
+        {
+            get
+            {
+                return health;
+            }
+            set
+            {
+                if (value >= 0)
+                {
+                    Active = false;
+                }
+            }
+        }
 
         public void Initialize(Animation animation, Vector2 position)
         {
