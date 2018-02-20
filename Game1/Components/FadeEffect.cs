@@ -55,6 +55,10 @@ namespace TopDownShooter
                     image.Alpha = 1.0f;
                 }
             }
+            else
+            {
+                image.Alpha = 1.0f;
+            }
         }
     }
 }

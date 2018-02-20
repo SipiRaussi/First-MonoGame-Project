@@ -86,6 +86,7 @@ namespace TopDownShooter
             Scale = Vector2.One;
             Alpha = 1.0f;
             SourceRectangle = Rectangle.Empty;
+            effectList = new Dictionary<string, ImageEffect>();
         }
 
         public void LoadContent()
@@ -97,11 +98,6 @@ namespace TopDownShooter
             if(Path != String.Empty)
             {
                 Texture = content.Load<Texture2D>(Path);
-            }
-
-            if (content.Load<SpriteFont>(FontName).ToString() != FontName)
-            {
-                FontName = "Fonts/Arial";
             }
 
             //Get font
@@ -169,11 +165,23 @@ namespace TopDownShooter
         public void UnloadContent()
         {
             content.Unload();
+            //I don't want to use var
+            foreach(KeyValuePair<string, ImageEffect> effect in effectList)
+            {
+                DeactivateEffect(effect.Key);
+            }
         }
 
         public void Update(GameTime gameTime)
         {
-
+            //I don't want to use var
+            foreach(KeyValuePair<string, ImageEffect> effect in effectList)
+            {
+                if (effect.Value.IsActive)
+                {
+                    effect.Value.Update(gameTime);
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
