@@ -130,7 +130,7 @@ namespace TopDownShooter
             return currentMouseState.Position;
         }
 
-        public void Update(GameTime gametime)
+        public void Update()
         {
             previousKeyboardState = currentKeyboardState;
             previousMouseState = currentMouseState;

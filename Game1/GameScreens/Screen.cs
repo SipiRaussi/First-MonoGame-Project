@@ -37,7 +37,8 @@ namespace TopDownShooter
 
         public virtual void Update(GameTime gameTime)
         {
-            InputManager.Instance.Update(gameTime);
+            //Check input in every screen
+            InputManager.Instance.Update();
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
