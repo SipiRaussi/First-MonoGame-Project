@@ -37,36 +37,39 @@ namespace TopDownShooter
         }
 
         // Update player animation
-        public void Update(GameTime gameTime, KeyboardState currentKeyboardState, KeyboardState previousKeyboardState, MouseState currentMouseState)
+        public void Update(GameTime gameTime)
         {
             PlayerAnimation.Position = Position;
             PlayerAnimation.Update(gameTime);
 
+            Point mousePosition = InputManager.Instance.MousePosition();
+
             //Check keyboard inputs
-            if (currentKeyboardState.IsKeyDown(Keys.A))
+            if (InputManager.Instance.KeyDown(Keys.A))
             {
                 Position.X -= moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.D))
+            if (InputManager.Instance.KeyDown(Keys.D))
             {
                 Position.X += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.W))
+            if (InputManager.Instance.KeyDown(Keys.W))
             {
                 Position.Y -= moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.S))
+            if (InputManager.Instance.KeyDown(Keys.S))
             {
                 Position.Y += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
+
             void CalculatePlayerRotation()
             {
                 //Make a vector from player 
-                pointingVector = new Vector2(currentMouseState.Position.X - (Position.X - Width / 2), currentMouseState.Position.Y - (Position.Y - Height / 2));
+                pointingVector = new Vector2(mousePosition.X - (Position.X - Width / 2), mousePosition.Y - (Position.Y - Height / 2));
                 //pointingVector.Normalize();
                 rotation = (float)Math.Atan2(pointingVector.X, -pointingVector.Y);
             }
@@ -76,7 +79,7 @@ namespace TopDownShooter
 
             currentWeapon.Update(Position);
 
-            if (currentMouseState.LeftButton == ButtonState.Pressed)
+            if (InputManager.Instance.MouseLeftDown())
             {
                 currentWeapon.Shoot(gameTime, pointingVector, rotation);
             }

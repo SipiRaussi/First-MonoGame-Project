@@ -35,9 +35,9 @@ namespace TopDownShooter
             content.Unload();
         }
 
-        public virtual void Update(GameTime gametime)
+        public virtual void Update(GameTime gameTime)
         {
-
+            InputManager.Instance.Update(gameTime);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)

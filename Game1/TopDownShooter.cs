@@ -46,112 +46,6 @@ namespace TopDownShooter
             IsMouseVisible = true;
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
-        protected override void Initialize()
-        {
-            ////Initialize player
-            //player = new Player();
-
-            ////Initialize the enemies list
-            //enemies = new List<Enemy>();
-
-            //Set the time keepers to zero
-            previousSpawnTime = TimeSpan.Zero;
-
-            //Used to determine how fast enemy respawns
-            enemySpawnTime = TimeSpan.FromSeconds(1.0f);
-
-            //Initialize our random number generator
-            random = new Random();
-
-            LoadContent();
-        }
-
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            //Pass GraphicsDevice information to screen manager
-            ScreenManager.Instance.GraphicsDevice = GraphicsDevice;
-
-            //Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            ScreenManager.Instance.SpriteBatch = spriteBatch;
-
-            //Pass content to screen manager
-            ScreenManager.Instance.LoadContent(Content);
-
-            //Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            //Load the player resources
-            Animation playerAnimation = new Animation();
-            Texture2D playerTexture = Content.Load<Texture2D>("Graphics/SonicFrames");
-            playerAnimation.Initialize(playerTexture, Vector2.Zero, 32, 40, 8, 75, Color.White, 1f, true);
-
-            //Place player within the bounds of the screen
-            Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X + 100, 
-                                                 GraphicsDevice.Viewport.TitleSafeArea.Y
-                                                 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-            //player.Initialize(playerAnimation, playerPosition);
-
-            ////Load enemy texture
-            //enemyTexture = Content.Load<Texture2D>("Graphics/Shadow");
-
-            //Projectile.blasterTexture = Content.Load<Texture2D>("Graphics/SonicOneFrame");
-        }
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-
-        }
-
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                Exit();
-            }
-
-            ScreenManager.Instance.Update(gameTime);
-
-            ////Save the previous state of the keyboard and game pad so we can determine single key/button presses
-            //previousKeyboardState = currentKeyboardState;
-            //previosMouseState = currentMouseState;
-
-            ////Read the current state of the keyboard and gamepad and store it
-            //currentKeyboardState = Keyboard.GetState();
-            //currentMouseState = Mouse.GetState();
-
-            ////Update the player
-            //player.Update(gameTime, currentKeyboardState, previousKeyboardState, currentMouseState);
-
-            ////Update the enemies
-            //UpdateEnemy(gameTime);
-
-            ////Update the collision
-            //UpdateCollision();
-
-            ////Update projectiles
-            //UpdateProjectiles(gameTime);
-        }
-
         //private void UpdateEnemy(GameTime gameTime)
         //{
         //    //Spawn a new enemy evry 1.5 seconds
@@ -271,6 +165,113 @@ namespace TopDownShooter
         //    //Add the enemy to the active enemy list
         //    enemies.Add(enemy);
         //}
+
+        /// <summary>
+        /// Allows the game to perform any initialization it needs to before starting to run.
+        /// This is where it can query for any required services and load any non-graphic
+        /// related content.  Calling base.Initialize will enumerate through any components
+        /// and initialize them as well.
+        /// </summary>
+        protected override void Initialize()
+        {
+            ////Initialize player
+            //player = new Player();
+
+            ////Initialize the enemies list
+            //enemies = new List<Enemy>();
+
+            //Set the time keepers to zero
+            previousSpawnTime = TimeSpan.Zero;
+
+            //Used to determine how fast enemy respawns
+            enemySpawnTime = TimeSpan.FromSeconds(1.0f);
+
+            //Initialize our random number generator
+            random = new Random();
+
+            LoadContent();
+        }
+
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
+        protected override void LoadContent()
+        {
+            //Pass GraphicsDevice information to screen manager
+            ScreenManager.Instance.GraphicsDevice = GraphicsDevice;
+
+            //Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            ScreenManager.Instance.SpriteBatch = spriteBatch;
+
+            //Pass content to screen manager
+            ScreenManager.Instance.LoadContent(Content);
+
+            //Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            //Load the player resources
+            Animation playerAnimation = new Animation();
+            Texture2D playerTexture = Content.Load<Texture2D>("Graphics/SonicFrames");
+            playerAnimation.Initialize(playerTexture, Vector2.Zero, 32, 40, 8, 75, Color.White, 1f, true);
+
+            //Place player within the bounds of the screen
+            Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X + 100, 
+                                                 GraphicsDevice.Viewport.TitleSafeArea.Y
+                                                 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+            //player.Initialize(playerAnimation, playerPosition);
+
+            ////Load enemy texture
+            //enemyTexture = Content.Load<Texture2D>("Graphics/Shadow");
+
+            //Projectile.blasterTexture = Content.Load<Texture2D>("Graphics/SonicOneFrame");
+        }
+
+        /// <summary>
+        /// UnloadContent will be called once per game and is the place to unload
+        /// game-specific content.
+        /// </summary>
+        protected override void UnloadContent()
+        {
+
+        }
+
+        /// <summary>
+        /// Allows the game to run logic such as updating the world,
+        /// checking for collisions, gathering input, and playing audio.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Update(GameTime gameTime)
+        {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                Exit();
+            }
+
+            ScreenManager.Instance.Update(gameTime);
+
+            ////Save the previous state of the keyboard and game pad so we can determine single key/button presses
+            //previousKeyboardState = currentKeyboardState;
+            //previosMouseState = currentMouseState;
+
+            ////Read the current state of the keyboard and gamepad and store it
+            //currentKeyboardState = Keyboard.GetState();
+            //currentMouseState = Mouse.GetState();
+
+            ////Update the player
+            //player.Update(gameTime, currentKeyboardState, previousKeyboardState, currentMouseState);
+
+            ////Update the enemies
+            //UpdateEnemy(gameTime);
+
+            ////Update the collision
+            //UpdateCollision();
+
+            ////Update projectiles
+            //UpdateProjectiles(gameTime);
+        }
+
 
         /// <summary>
         /// This is called when the game should draw itself.

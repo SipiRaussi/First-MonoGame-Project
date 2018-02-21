@@ -14,14 +14,11 @@ namespace TopDownShooter
 {
     public class ScreenManager
     {
-        //Singleton of this class
-        private static ScreenManager instance;
-
         //This handles all the content of this project
         [XmlIgnore]
         public ContentManager Content { private set; get; }
 
-        //Screen widht and height
+        //Screen width and height
         private Screen currentScreen, newScreen;
         [XmlIgnore]
         public Vector2 Dimensions { private set; get; }
@@ -35,6 +32,9 @@ namespace TopDownShooter
         public bool IsTransitioning { get; private set; }
 
         private XmlManager<Screen> xmlGameScreenManager;
+
+        //Singleton of this class
+        private static ScreenManager instance;
 
         public static ScreenManager Instance
         {
