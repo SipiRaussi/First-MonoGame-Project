@@ -25,10 +25,6 @@ namespace TopDownShooter
         private MouseState            currentMouseState;
         private MouseState            previosMouseState;
 
-        //Enemies
-        private Texture2D             enemyTexture;
-        private List<Enemy>           enemies;
-
         //Projectiles
         //private Texture2D             blasterTexture;
 
@@ -57,23 +53,23 @@ namespace TopDownShooter
             //Initialize player
             player = new Player();
 
-            //Initialize the enemies list
-            enemies = new List<Enemy>();
-
             //Set the time keepers to zero
             previousSpawnTime = TimeSpan.Zero;
 
             //Used to determine how fast enemy respawns
             enemySpawnTime = TimeSpan.FromSeconds(1.0f);
 
+            //Initalize EnemyManager
+            EnemyManager.Instance.Initialize(graphics);
+
             //Initialize our random number generator
             random = new Random();
 
             //Set window to match target resolution and set it to fullscreen
-            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            /*graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
             graphics.ToggleFullScreen();
-            graphics.ApplyChanges();
+            graphics.ApplyChanges();*/
 
             LoadContent();
         }
@@ -99,7 +95,7 @@ namespace TopDownShooter
             player.Initialize(playerAnimation, playerPosition);
 
             //Load enemy texture
-            enemyTexture = Content.Load<Texture2D>("Graphics/Shadow");
+            EnemyManager.enemyTexture = Content.Load<Texture2D>("Graphics/Shadow");
 
             Projectile.Texture = Content.Load<Texture2D>("Graphics/SonicOneFrame");
         }
@@ -137,7 +133,9 @@ namespace TopDownShooter
             player.Update(gameTime, currentKeyboardState, previousKeyboardState, currentMouseState);
 
             //Update the enemies
-            UpdateEnemy(gameTime);
+            //UpdateEnemy(gameTime);
+
+            EnemyManager.Instance.Update(gameTime, player);
 
             //Update the collision
             UpdateCollision();
@@ -146,30 +144,10 @@ namespace TopDownShooter
             UpdateProjectiles(gameTime);
         }
 
-        private void UpdateEnemy(GameTime gameTime)
-        {
-            //Spawn a new enemy every 1.5 seconds
-            if(gameTime.TotalGameTime - previousSpawnTime > enemySpawnTime)
-            {
-                previousSpawnTime = gameTime.TotalGameTime;
-                //Add enemy
-                AddEnemy();
-            }
-
-            //Update the enemies
-            for(int enemyIndex = enemies.Count - 1; enemyIndex >= 0; enemyIndex--)
-            {
-                enemies[enemyIndex].Update(gameTime,player.Position);
-                if(enemies[enemyIndex].Active == false)
-                {
-                    enemies.RemoveAt(enemyIndex);
-                }
-            }
-        }
-
         private void UpdateProjectiles(GameTime gameTime)
         {
             List<int> projectilesToDestroy = new List<int>();
+            List<Enemy> enemies = EnemyManager.Instance.Enemies;
 
             //Update projectiles
             if (Projectile.Projectiles != null)
@@ -238,13 +216,16 @@ namespace TopDownShooter
             Rectangle rectangle1;
             Rectangle rectangle2;
 
+            //For readabilitys sake
+            List<Enemy> enemies = EnemyManager.Instance.Enemies;
+
             //Only create the rectangle once for player
             rectangle1 = new Rectangle((int)player.Position.X,
                                        (int)player.Position.Y,
                                        player.Width,
                                        player.Height);
             //Do the collision between the player and the enemies
-            for (int enemyIndex = 0; enemyIndex < enemies.Count; enemyIndex++)
+            for (int enemyIndex = 0; enemyIndex < EnemyManager.Instance.Enemies.Count; enemyIndex++)
             {
                 rectangle2 = new Rectangle((int)enemies[enemyIndex].Position.X,
                                            (int)enemies[enemyIndex].Position.Y,
@@ -257,29 +238,9 @@ namespace TopDownShooter
                     player.Health -= enemies[enemyIndex].Damage;
 
                     //Since the enemy collided with the player destroy it
-                    enemies[enemyIndex].Health = 0;
+                    EnemyManager.Instance.Enemies[enemyIndex].Health = 0;
                 }
             }
-        }
-
-        private void AddEnemy()
-        {
-            //Create the animation object
-            Animation enemyAnimation = new Animation();
-
-            //Initialize the animation with the correct animation information
-            enemyAnimation.Initialize(enemyTexture, Vector2.Zero, 64, 64, 7, 75, Color.White, 1f, true);
-
-            //Randomly generate the position of the enemy
-            Vector2 position = new Vector2(GraphicsDevice.Viewport.Width + enemyTexture.Width / 2,
-                                           random.Next(100, GraphicsDevice.Viewport.Height - 100));
-
-            //Create and initialize enemy
-            Enemy enemy = new Enemy();
-            enemy.Initialize(enemyAnimation, position);
-
-            //Add the enemy to the active enemy list
-            enemies.Add(enemy);
         }
 
         /// <summary>
@@ -288,8 +249,10 @@ namespace TopDownShooter
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            List<Enemy> enemies = EnemyManager.Instance.Enemies;
+
             //Background color
-            GraphicsDevice.Clear(Color.DarkKhaki);
+            GraphicsDevice.Clear(Color.LightSkyBlue);
 
             spriteBatch.Begin();
 
