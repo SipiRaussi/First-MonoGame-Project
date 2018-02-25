@@ -36,7 +36,7 @@ namespace TopDownShooter
             Active = true;
 
             //Set health for the enemy
-            Health = 50;
+            Health = 10;
 
             //Set amount of damage the enemy can do
             Damage = 10;

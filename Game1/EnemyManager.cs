@@ -23,6 +23,9 @@ namespace TopDownShooter
         //New random for enemy placement
         private Random random;
 
+        //Spawnpoints
+        private List<Vector2> spawnpoints;
+
         //Graphics device for screen dimensions
         private GraphicsDeviceManager graphics;
 
@@ -49,8 +52,11 @@ namespace TopDownShooter
             enemyAnimation.Initialize(enemyTexture, Vector2.Zero, 64, 64, 7, 75, Color.White, 1f, true);
 
             //Randomly generate the position of the enemy
-            Vector2 position = new Vector2(graphics.GraphicsDevice.Viewport.Width + enemyTexture.Width / 2,
-                                           random.Next(100, graphics.GraphicsDevice.Viewport.Height - 100));
+            //Vector2 position = new Vector2(graphics.GraphicsDevice.Viewport.Width + enemyTexture.Width / 2,
+            //                             random.Next(100, graphics.GraphicsDevice.Viewport.Height - 100));
+
+            int index = random.Next(spawnpoints.Count);
+            Vector2 position = new Vector2(spawnpoints[index].X, spawnpoints[index].Y);
 
             //Create and initialize enemy
             Enemy enemy = new Enemy();
@@ -59,14 +65,45 @@ namespace TopDownShooter
             //Add the enemy to the active enemy list
             Enemies.Add(enemy);
         }
-        
+
+        private void SetSpawns()
+        {
+            //Make new list and save bounds
+            spawnpoints = new List<Vector2>();
+            Rectangle edges = graphics.GraphicsDevice.Viewport.Bounds;
+
+            //Add offset to account for the enemyTexture
+            edges.Inflate(32, 32);
+
+            //Top side of screen
+            spawnpoints.Add(new Vector2(edges.Center.X, edges.Top));
+
+            //Bottom side of screen
+            spawnpoints.Add(new Vector2(edges.Center.X, edges.Bottom));
+
+            //Left side of screen
+            spawnpoints.Add(new Vector2(edges.Left, edges.Center.Y));
+
+            //Right side of screen
+            spawnpoints.Add(new Vector2(edges.Right, edges.Center.Y));
+        }
+
+        private void SetSpawns(params Vector2[] spawns)
+        {
+            for (int i = 0; i < spawns.Length; i++)
+            {
+                spawnpoints.Add(spawns[i]);
+            }
+        }
+
         public void Initialize(GraphicsDeviceManager graphics)
         {
             this.graphics = graphics;
             random = new Random();
             previousSpawnTime = TimeSpan.Zero;
-            spawnInterval = TimeSpan.FromSeconds(1.0f);
+            spawnInterval = TimeSpan.FromSeconds(0.3f);
             Enemies = new List<Enemy>();
+            SetSpawns();
         }
 
         /// <summary>
@@ -94,6 +131,5 @@ namespace TopDownShooter
             }
         }
 
-        
     }
 }

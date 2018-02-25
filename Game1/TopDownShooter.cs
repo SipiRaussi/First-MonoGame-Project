@@ -25,9 +25,6 @@ namespace TopDownShooter
         private MouseState            currentMouseState;
         private MouseState            previosMouseState;
 
-        //Projectiles
-        //private Texture2D             blasterTexture;
-
         //The rate at which the enemies appear
         private TimeSpan              enemySpawnTime;
         private TimeSpan              previousSpawnTime;
@@ -50,6 +47,12 @@ namespace TopDownShooter
         /// </summary>
         protected override void Initialize()
         {
+            //Set window to match target resolution and set it to fullscreen
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width - 200;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height - 200;
+            //graphics.ToggleFullScreen();
+            graphics.ApplyChanges();
+
             //Initialize player
             player = new Player();
 
@@ -64,13 +67,7 @@ namespace TopDownShooter
 
             //Initialize our random number generator
             random = new Random();
-
-            //Set window to match target resolution and set it to fullscreen
-            /*graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            graphics.ToggleFullScreen();
-            graphics.ApplyChanges();*/
-
+            
             LoadContent();
         }
 
