@@ -21,7 +21,8 @@ namespace TopDownShooter
         public int       Height { get { return Animation.FrameHeight; } }
 
         //The speed at witch the enemy moves
-        private float    enemyMoveSpeed;
+        private float    moveSpeed;
+        private float    rotation;
 
         public void Initialize(Animation animation, Vector2 position)
         {
@@ -35,22 +36,30 @@ namespace TopDownShooter
             Active = true;
 
             //Set health for the enemy
-            Health = 50;
+            Health = 10;
 
             //Set amount of damage the enemy can do
             Damage = 10;
 
             //Set how fast the enemy moves
-            enemyMoveSpeed = 6f;
+            moveSpeed = 200;
+            rotation = 0f;
 
             //Set the score value of the enemy
             Value = 100;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Vector2 playerPos)
         {
             //The enemy always moves to the left so decrement its x position
-            Position.X -= enemyMoveSpeed;
+            //Position.X -= enemyMoveSpeed;
+
+            Vector2 pointingVector = new Vector2(playerPos.X - Position.X, playerPos.Y - Position.Y);
+            pointingVector.Normalize();
+
+            Position += pointingVector * moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            rotation = (float)Math.Atan2(pointingVector.X, -pointingVector.Y);
+
 
             //Update the position of the animation
             Animation.Position = Position;
@@ -69,7 +78,7 @@ namespace TopDownShooter
         public void Draw(SpriteBatch spriteBatch)
         {
             //Draw the animation
-            Animation.Draw(spriteBatch, 0f);
+            Animation.Draw(spriteBatch, rotation);
         }
     }
 }

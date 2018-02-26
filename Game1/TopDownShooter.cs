@@ -16,21 +16,14 @@ namespace TopDownShooter
         private GraphicsDeviceManager graphics;
         private SpriteBatch           spriteBatch;
 
-        ////Player declaration
-        //private Player                player;
+        //Player declaration
+        private Player                player;
 
-        ////Input device states
-        //private KeyboardState         currentKeyboardState;
-        //private KeyboardState         previousKeyboardState;
-        //private MouseState            currentMouseState;
-        //private MouseState            previosMouseState;
-
-        ////Enemies
-        //private Texture2D             enemyTexture;
-        //private List<Enemy>           enemies;
-
-        //Projectiles
-        //private Texture2D             blasterTexture;
+        //Input device states
+        private KeyboardState         currentKeyboardState;
+        private KeyboardState         previousKeyboardState;
+        private MouseState            currentMouseState;
+        private MouseState            previosMouseState;
 
         //The rate at which the enemies appear
         private TimeSpan              enemySpawnTime;
@@ -54,11 +47,14 @@ namespace TopDownShooter
         /// </summary>
         protected override void Initialize()
         {
-            ////Initialize player
-            //player = new Player();
+            //Set window to match target resolution and set it to fullscreen
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width - 200;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height - 200;
+            //graphics.ToggleFullScreen();
+            graphics.ApplyChanges();
 
-            ////Initialize the enemies list
-            //enemies = new List<Enemy>();
+            //Initialize player
+            player = new Player();
 
             //Set the time keepers to zero
             previousSpawnTime = TimeSpan.Zero;
@@ -66,9 +62,12 @@ namespace TopDownShooter
             //Used to determine how fast enemy respawns
             enemySpawnTime = TimeSpan.FromSeconds(1.0f);
 
+            //Initalize EnemyManager
+            EnemyManager.Instance.Initialize(graphics);
+
             //Initialize our random number generator
             random = new Random();
-
+            
             LoadContent();
         }
 
@@ -78,16 +77,6 @@ namespace TopDownShooter
         /// </summary>
         protected override void LoadContent()
         {
-            //Pass GraphicsDevice information to screen manager
-            ScreenManager.Instance.GraphicsDevice = GraphicsDevice;
-
-            //Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            ScreenManager.Instance.SpriteBatch = spriteBatch;
-
-            //Pass content to screen manager
-            ScreenManager.Instance.LoadContent(Content);
-
             //Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -100,12 +89,12 @@ namespace TopDownShooter
             Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X + 100, 
                                                  GraphicsDevice.Viewport.TitleSafeArea.Y
                                                  + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-            //player.Initialize(playerAnimation, playerPosition);
+            player.Initialize(playerAnimation, playerPosition);
 
-            ////Load enemy texture
-            //enemyTexture = Content.Load<Texture2D>("Graphics/Shadow");
+            //Load enemy texture
+            EnemyManager.enemyTexture = Content.Load<Texture2D>("Graphics/Shadow");
 
-            //Projectile.blasterTexture = Content.Load<Texture2D>("Graphics/SonicOneFrame");
+            Projectile.Texture = Content.Load<Texture2D>("Graphics/SonicOneFrame");
         }
 
         /// <summary>
@@ -129,148 +118,127 @@ namespace TopDownShooter
                 Exit();
             }
 
-            ScreenManager.Instance.Update(gameTime);
+            //Save the previous state of the keyboard and game pad so we can determine single key/button presses
+            previousKeyboardState = currentKeyboardState;
+            previosMouseState = currentMouseState;
 
-            ////Save the previous state of the keyboard and game pad so we can determine single key/button presses
-            //previousKeyboardState = currentKeyboardState;
-            //previosMouseState = currentMouseState;
+            //Read the current state of the keyboard and gamepad and store it
+            currentKeyboardState = Keyboard.GetState();
+            currentMouseState = Mouse.GetState();
 
-            ////Read the current state of the keyboard and gamepad and store it
-            //currentKeyboardState = Keyboard.GetState();
-            //currentMouseState = Mouse.GetState();
+            //Update the player
+            player.Update(gameTime, currentKeyboardState, previousKeyboardState, currentMouseState);
 
-            ////Update the player
-            //player.Update(gameTime, currentKeyboardState, previousKeyboardState, currentMouseState);
-
-            ////Update the enemies
+            //Update the enemies
             //UpdateEnemy(gameTime);
 
-            ////Update the collision
-            //UpdateCollision();
+            EnemyManager.Instance.Update(gameTime, player);
 
-            ////Update projectiles
-            //UpdateProjectiles(gameTime);
+            //Update the collision
+            UpdateCollision();
+
+            //Update projectiles
+            UpdateProjectiles(gameTime);
         }
 
-        //private void UpdateEnemy(GameTime gameTime)
-        //{
-        //    //Spawn a new enemy evry 1.5 seconds
-        //    if(gameTime.TotalGameTime - previousSpawnTime > enemySpawnTime)
-        //    {
-        //        previousSpawnTime = gameTime.TotalGameTime;
-        //        //Add enemy
-        //        AddEnemy();
-        //    }
+        private void UpdateProjectiles(GameTime gameTime)
+        {
+            List<int> projectilesToDestroy = new List<int>();
+            List<Enemy> enemies = EnemyManager.Instance.Enemies;
 
-        //    //Update the enemies
-        //    for(int enemyIndex = enemies.Count - 1; enemyIndex >= 0; enemyIndex--)
-        //    {
-        //        enemies[enemyIndex].Update(gameTime);
-        //        if(enemies[enemyIndex].Active == false)
-        //        {
-        //            enemies.RemoveAt(enemyIndex);
-        //        }
-        //    }
-        //}
+            //Update projectiles
+            if (Projectile.Projectiles != null)
+            {
+                //Check for collisions with enemies
+                for (int i = 0; i < Projectile.Projectiles.Count; i++)
+                {
+                    Projectile.Projectiles[i].Update(gameTime);
+                    for (int j = 0; j < enemies.Count; j++)
+                    {
+                        Rectangle rectangle1;
+                        Rectangle rectangle2;
 
-        //private void UpdateProjectiles(GameTime gameTime)
-        //{
-        //    List<int> projectilesToDestroy = new List<int>();
+                        //Projectile rectangle
+                        rectangle1 = new Rectangle((int)Projectile.Projectiles[i].Position.X,
+                            (int)Projectile.Projectiles[i].Position.Y,
+                            Projectile.Projectiles[i].Animation.FrameWidth,
+                            Projectile.Projectiles[i].Animation.FrameHeight);
 
-        //    //Update projectiles
-        //    if (Projectile.Projectiles != null)
-        //    {
-        //        for (int i = 0; i < Projectile.Projectiles.Count; i++)
-        //        {
-        //            Projectile.Projectiles[i].Update(gameTime);
-        //            for (int j = 0; j < enemies.Count; j++)
-        //            {
-        //                Rectangle rectangle1;
-        //                Rectangle rectangle2;
+                        //Enemy rectangle
+                        rectangle2 = new Rectangle((int)enemies[j].Position.X,
+                                           (int)enemies[j].Position.Y,
+                                           enemies[j].Width,
+                                           enemies[j].Height);
 
-        //                //Projectile rectangle
-        //                rectangle1 = new Rectangle((int)Projectile.Projectiles[i].Position.X,
-        //                    (int)Projectile.Projectiles[i].Position.Y,
-        //                    Projectile.Projectiles[i].Animation.FrameWidth,
-        //                    Projectile.Projectiles[i].Animation.FrameHeight);
+                        if (rectangle1.Intersects(rectangle2))
+                        {
+                            //Subratct health and mark projectile for deactivation
+                            enemies[j].Health -= Projectile.Projectiles[i].Damage;
+                            projectilesToDestroy.Add(i);
+                        }
+                    }
+                }
 
-        //                //Enemy rectangle
-        //                rectangle2 = new Rectangle((int)enemies[j].Position.X,
-        //                                   (int)enemies[j].Position.Y,
-        //                                   enemies[j].Width,
-        //                                   enemies[j].Height);
+                //Range check
+                for (int i = 0; i < Projectile.Projectiles.Count; i++)
+                {
+                    if (Projectile.Projectiles[i].RangeCheck())
+                    {
+                        projectilesToDestroy.Add(i);
+                    }
+                }
 
-        //                if (rectangle1.Intersects(rectangle2))
-        //                {
-        //                    enemies[j].Health -= Projectile.Projectiles[i].Damage;
-        //                    projectilesToDestroy.Add(i);
-        //                }
-        //            }
-        //        }
+                //Remove destroyed projectiles
+                if (Projectile.Projectiles.Count > 0)
+                {
+                    for (int i = 0; i < projectilesToDestroy.Count; i++)
+                    {
+                        //Test if the projectile still exists
+                        if (i < Projectile.Projectiles.Count)
+                        {
+                            Projectile.Projectiles[i].Active = false;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    } 
+                }
+            }
+        }
 
-        //        //Remove destroyed projectiles
-        //        for (int i = 0; i < projectilesToDestroy.Count; i++)
-        //        {
-        //            Projectile.Projectiles.RemoveAt(projectilesToDestroy[i]);
-        //        }
-        //    }
-        //}
+        private void UpdateCollision()
+        {
+            //Use the Rectangle's built-in intersect function to determine if two objects are overlapping
+            Rectangle rectangle1;
+            Rectangle rectangle2;
 
-        //private void UpdateCollision()
-        //{
-        //    //Use the Rectangle's built-in intersect function to determine if two objects are overlapping
-        //    Rectangle rectangle1;
-        //    Rectangle rectangle2;
+            //For readabilitys sake
+            List<Enemy> enemies = EnemyManager.Instance.Enemies;
 
-        //    //Only create the rectangle once for player
-        //    rectangle1 = new Rectangle((int)player.Position.X,
-        //                               (int)player.Position.Y,
-        //                               player.Width,
-        //                               player.Height);
-        //    //Do the collision between the player and the enemies
-        //    for (int enemyIndex = 0; enemyIndex < enemies.Count; enemyIndex++)
-        //    {
-        //        rectangle2 = new Rectangle((int)enemies[enemyIndex].Position.X,
-        //                                   (int)enemies[enemyIndex].Position.Y,
-        //                                   enemies[enemyIndex].Width,
-        //                                   enemies[enemyIndex].Height);
-        //        //Determine if the two objects collided with each other
-        //        if (rectangle1.Intersects(rectangle2))
-        //        {
-        //            //Substract the healt from the player based on the enemy damage
-        //            player.Health -= enemies[enemyIndex].Damage;
+            //Only create the rectangle once for player
+            rectangle1 = new Rectangle((int)player.Position.X,
+                                       (int)player.Position.Y,
+                                       player.Width,
+                                       player.Height);
+            //Do the collision between the player and the enemies
+            for (int enemyIndex = 0; enemyIndex < EnemyManager.Instance.Enemies.Count; enemyIndex++)
+            {
+                rectangle2 = new Rectangle((int)enemies[enemyIndex].Position.X,
+                                           (int)enemies[enemyIndex].Position.Y,
+                                           enemies[enemyIndex].Width,
+                                           enemies[enemyIndex].Height);
+                //Determine if the two objects collided with each other
+                if (rectangle1.Intersects(rectangle2))
+                {
+                    //Substract the healt from the player based on the enemy damage
+                    player.Health -= enemies[enemyIndex].Damage;
 
-        //            //Since the enemy collided with the player destroy it
-        //            enemies[enemyIndex].Health = 0;
-
-        //            //If the player health is less than zero we died
-        //            if(player.Health <= 0)
-        //            {
-        //                player.Active = false;
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private void AddEnemy()
-        //{
-        //    //Create the animation object
-        //    Animation enemyAnimation = new Animation();
-
-        //    //Initialize the animation with the correct animation information
-        //    enemyAnimation.Initialize(enemyTexture, Vector2.Zero, 64, 64, 7, 75, Color.White, 1f, true);
-
-        //    //Randomly generate the position of the enemy
-        //    Vector2 position = new Vector2(GraphicsDevice.Viewport.Width + enemyTexture.Width / 2,
-        //                                   random.Next(100, GraphicsDevice.Viewport.Height - 100));
-
-        //    //Create and initialize enemy
-        //    Enemy enemy = new Enemy();
-        //    enemy.Initialize(enemyAnimation, position);
-
-        //    //Add the enemy to the active enemy list
-        //    enemies.Add(enemy);
-        //}
+                    //Since the enemy collided with the player destroy it
+                    EnemyManager.Instance.Enemies[enemyIndex].Health = 0;
+                }
+            }
+        }
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -278,30 +246,30 @@ namespace TopDownShooter
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            List<Enemy> enemies = EnemyManager.Instance.Enemies;
+
             //Background color
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.LightSkyBlue);
 
             spriteBatch.Begin();
 
-            ScreenManager.Instance.Draw(spriteBatch);
+            //Draw enemies
+            for (int enemy = 0; enemy < enemies.Count; enemy++ )
+            {
+                enemies[enemy].Draw(spriteBatch);
+            }
 
-            ////Draw enemies
-            //for (int enemy = 0; enemy < enemies.Count; enemy++ )
-            //{
-            //    enemies[enemy].Draw(spriteBatch);
-            //}
+            //Draw player
+            player.Draw(spriteBatch);
 
-            ////Draw player
-            //player.Draw(spriteBatch);
-
-            ////Draw projectiles
-            //if (Projectile.Projectiles != null)
-            //{
-            //    for (int i = 0; i < Projectile.Projectiles.Count; i++)
-            //    {
-            //        Projectile.Projectiles[i].Draw(spriteBatch);
-            //    } 
-            //}
+            //Draw projectiles
+            if (Projectile.Projectiles != null)
+            {
+                for (int i = 0; i < Projectile.Projectiles.Count; i++)
+                {
+                    Projectile.Projectiles[i].Draw(spriteBatch);
+                }
+            }
 
             spriteBatch.End();
 
