@@ -34,7 +34,7 @@ namespace TopDownShooter
             Image.Update(gametime);
 
             //Press Enter to change screen (current to back to it self)
-            if(Keyboard.GetState().IsKeyDown(Keys.Enter) && !ScreenManager.Instance.IsTransitioning)
+            if(InputManager.Instance.KeyPressed(Keys.Enter, Keys.Z))
             {
                 ScreenManager.Instance.ChangeScreens(Type.Name);
             }

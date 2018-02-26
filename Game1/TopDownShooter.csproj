@@ -52,6 +52,7 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyManager.cs" />
     <Compile Include="GameScreens\GameScreen.cs" />
+    <Compile Include="InputManager.cs" />
     <Compile Include="GameScreens\Screen.cs" />
     <Compile Include="GameScreens\LevelCompleteScreen.cs" />
     <Compile Include="GameScreens\LevelMenuScreen.cs" />
@@ -128,14 +129,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.manifest" />
-    <None Include="Load\SplashScreen.xml" />
+    <None Include="Load\SplashScreen.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Graphics\Shadow.png" />
     <Content Include="Content\Graphics\SonicFrames.png" />
     <Content Include="Content\Graphics\SonicOneFrame.png" />
     <Content Include="Content\Graphics\SplashScreen.png" />
-    <Content Include="Load\ScreenManager.xml" />
+    <None Include="Load\ScreenManager.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Fonts\Arial.spritefont" />

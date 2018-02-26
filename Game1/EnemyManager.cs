@@ -27,7 +27,7 @@ namespace TopDownShooter
         private List<Vector2> spawnpoints;
 
         //Graphics device for screen dimensions
-        private GraphicsDeviceManager graphics;
+        private GraphicsDevice graphics;
 
         //Singleton
         private static EnemyManager instance;
@@ -70,7 +70,7 @@ namespace TopDownShooter
         {
             //Make new list and save bounds
             spawnpoints = new List<Vector2>();
-            Rectangle edges = graphics.GraphicsDevice.Viewport.Bounds;
+            Rectangle edges = graphics.Viewport.Bounds;
 
             //Add offset to account for the enemyTexture
             edges.Inflate(32, 32);
@@ -96,7 +96,7 @@ namespace TopDownShooter
             }
         }
 
-        public void Initialize(GraphicsDeviceManager graphics)
+        public void Initialize(GraphicsDevice graphics)
         {
             this.graphics = graphics;
             random = new Random();
