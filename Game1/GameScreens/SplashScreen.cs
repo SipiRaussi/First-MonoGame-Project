@@ -36,7 +36,7 @@ namespace TopDownShooter
             //Press Enter to change screen (current to back to it self)
             if(InputManager.Instance.KeyPressed(Keys.Enter, Keys.Z))
             {
-                ScreenManager.Instance.ChangeScreens(Type.Name);
+                ScreenManager.Instance.ChangeScreens("MainMenuScreen");
             }
         }
 
