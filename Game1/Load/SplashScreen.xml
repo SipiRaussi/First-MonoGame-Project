@@ -4,8 +4,8 @@
     <Path>Graphics/SplashScreen</Path>
     <IsActive>true</IsActive>
     <Position>
-      <X>420</X>
-      <Y>250</Y>
+      <X>-500</X>
+      <Y>-250</Y>
     </Position>
     <Scale>
       <X>0.5</X>

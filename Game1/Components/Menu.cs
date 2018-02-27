@@ -25,11 +25,7 @@ namespace TopDownShooter
 
         public string ID
         {
-            get
-            {
-                return id;
-            }
-
+            get { return id; }
             set
             {
                 id = value;
@@ -59,8 +55,10 @@ namespace TopDownShooter
                     item.Image.Position = new Vector2((ScreenManager.Instance.Dimensions.X - item.Image.SourceRectangle.Width) / 2,
                                                       dimensions.Y);
                 }
-            }
 
+                dimensions += new Vector2(item.Image.SourceRectangle.Width,
+                                          item.Image.SourceRectangle.Height);
+            }
         }
 
         public Menu()

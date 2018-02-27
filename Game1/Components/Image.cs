@@ -110,8 +110,8 @@ namespace TopDownShooter
             if (Texture != null)
             {
                 dimensions.X += Texture.Width;
-                dimensions.X += spriteFont.MeasureString(Text).X;
             }
+            dimensions.X += spriteFont.MeasureString(Text).X;
 
             //Get texture and font Height
             if (Texture != null)
@@ -188,7 +188,7 @@ namespace TopDownShooter
         {
             origin = new Vector2(SourceRectangle.Width / 2,
                                  SourceRectangle.Height / 2);
-            spriteBatch.Draw(Texture, Position, SourceRectangle, Color.White * Alpha, 0.0f, origin, Scale, SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(Texture, Position + origin, SourceRectangle, Color.White * Alpha, 0.0f, origin, Scale, SpriteEffects.None, 0.0f);
         }
     }
 }
