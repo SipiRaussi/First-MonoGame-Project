@@ -18,8 +18,8 @@ namespace TopDownShooter
         [XmlIgnore]
         public ContentManager Content { private set; get; }
 
-        //Screen width and height
         private Screen currentScreen, newScreen;
+        //Screen width and height
         [XmlIgnore]
         public Vector2 Dimensions { private set; get; }
         [XmlIgnore]
@@ -90,7 +90,7 @@ namespace TopDownShooter
 
         private ScreenManager()
         {
-            Dimensions = new Vector2(640, 480);
+            Dimensions = new Vector2(780, 480);
             currentScreen = new SplashScreen();
             xmlGameScreenManager = new XmlManager<Screen>();
             xmlGameScreenManager.Type = currentScreen.Type;

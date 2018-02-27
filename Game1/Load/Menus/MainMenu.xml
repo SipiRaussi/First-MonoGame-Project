@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Menu>
   <Axis>Y</Axis>
-  <Effect>FadeEffect</Effect>
+  <Effects>FadeEffect</Effects>
   
   <Item>
     <Image>

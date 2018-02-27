@@ -80,7 +80,7 @@ namespace TopDownShooter
         //Default Constructor
         public Image()
         {
-            Path = Text = Effects =String.Empty;
+            Path = Text = Effects = String.Empty;
             FontName = "Fonts/Ubuntu-L";
             Position = Vector2.Zero;
             Scale = Vector2.One;
@@ -103,7 +103,6 @@ namespace TopDownShooter
             //Get font
             spriteFont = content.Load<SpriteFont>(FontName);
 
-            //Get textures and font width and height
             Vector2 dimensions = Vector2.Zero;
 
             //Get texture and font width
@@ -111,6 +110,7 @@ namespace TopDownShooter
             {
                 dimensions.X += Texture.Width;
             }
+
             dimensions.X += spriteFont.MeasureString(Text).X;
 
             //Get texture and font Height
@@ -151,6 +151,7 @@ namespace TopDownShooter
 
             //Apply image effects
             SetEffect<FadeEffect>(ref FadeEffect);
+
             if(Effects != String.Empty)
             {
                 string[] split = Effects.Split(':');
