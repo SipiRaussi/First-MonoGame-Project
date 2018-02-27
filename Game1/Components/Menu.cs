@@ -92,6 +92,7 @@ namespace TopDownShooter
             }
         }
 
+        //asdasdasd test
         public void Update(GameTime gameTime)
         {
             if (Axis == "X")
